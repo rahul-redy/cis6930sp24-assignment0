@@ -16,10 +16,14 @@ def main():
     db = createdb()
 
     # Insert data
-    populatedb(db, incidents)
+    if db is not None:  # Check if db is not None before proceeding
+        # Insert data
+        populatedb(db, incidents)
 
-    # Print incident counts
-    status(db)
+        # Print incident counts
+        status(db)
+    else:
+        print("Error creating the database. Check the createdb function.")
 
 if __name__ == '__main__':
     main()

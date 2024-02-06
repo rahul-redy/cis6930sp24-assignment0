@@ -6,6 +6,8 @@ import sqlite3
 import re
 from pypdf import PdfReader
 
+
+
 def fetchincidents(url):
     # Set a user-agent to avoid server rejection
     headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'}
@@ -18,8 +20,6 @@ def fetchincidents(url):
     except Exception as e:
         print(f"Error downloading data: {e}")
         return None
-
-
 
 
 
@@ -67,7 +67,8 @@ def createdb():
         os.makedirs('resources')
 
     # Connect to the database or create if it doesn't exist
-    conn = sqlite3.connect('./resources/normanpd.db')
+    db_path = os.path.join(os.getcwd(), 'resources', 'normanpd.db')
+    conn = sqlite3.connect(db_path)
     
     # Create a cursor object to execute SQL queries
     cursor = conn.cursor()
@@ -82,17 +83,23 @@ def createdb():
             incident_ori TEXT
         )
     ''')
-
+    
     # Commit the changes and close the connection
     conn.commit()
     conn.close()
+    # Print statements for debugging
+    print("Creating database...")
+    print("Database Path:", db_path)
+
+    return db_path
 
 
 
 def populatedb(db, incidents):
     # Connect to the database
+    print("Database Path:", db)
     conn = sqlite3.connect(db)
-    print("Database Path:", db)  # Add this line
+      # Add this line
     # Create a cursor object
     cursor = conn.cursor()
 
@@ -107,6 +114,7 @@ def populatedb(db, incidents):
     # Commit the changes and close the connection
     conn.commit()
     conn.close()
+
 
 def status(db):
     # Connect to the database
