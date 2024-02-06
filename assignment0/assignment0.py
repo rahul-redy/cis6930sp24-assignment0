@@ -87,9 +87,6 @@ def createdb():
     # Commit the changes and close the connection
     conn.commit()
     conn.close()
-    # Print statements for debugging
-    print("Creating database...")
-    print("Database Path:", db_path)
 
     return db_path
 
