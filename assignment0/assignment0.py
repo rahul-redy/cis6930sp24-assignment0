@@ -94,7 +94,6 @@ def createdb():
 
 def populatedb(db, incidents):
     # Connect to the database
-    print("Database Path:", db)
     conn = sqlite3.connect(db)
       # Add this line
     # Create a cursor object
