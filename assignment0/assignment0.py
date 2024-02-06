@@ -45,9 +45,6 @@ def extractincidents(incident_data):
         # Search for patterns in the page text
         matches = pattern.findall(page_text)
 
-        # Print the matches for debugging
-        print("Debug: Matches -", matches)
-
         # Process matches and skip empty rows
         for match in matches:
             if match[0] and match[1] and match[2] and match[3] and match[4]:
