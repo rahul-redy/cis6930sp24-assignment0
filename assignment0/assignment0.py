@@ -21,45 +21,31 @@ def fetchincidents(url):
         print(f"Error downloading data: {e}")
         return None
 
-
+def clean_text(text):
+    return text.replace('\x00', '') 
 
 def extractincidents(incident_data):
-    # Convert the bytes object to a file-like object
-    pdf_file = io.BytesIO(incident_data)
-
-    # Create a PDF reader object
-    pdf_reader = PdfReader(pdf_file)
-
-    # Initialize an empty list to store extracted incidents
-    incidents_list = []
-
-    # Iterate through each page of the PDF
-    for page_num in range(len(pdf_reader.pages)):
-        # Get the text content of the current page
-        page = pdf_reader.pages[page_num]
-        page_text = page.extract_text()
-
-        # Use regular expressions to extract relevant information
-        pattern = re.compile(r'(\d{1,2}/\d{1,2}/\d{4} \d{1,2}:\d{2}) (\d{4}-\d+) (\S+ \S+ \S+) ([^\n]+) (\S+)')
-
-        # Search for patterns in the page text
-        matches = pattern.findall(page_text)
-
-        # Process matches and skip empty rows
-        for match in matches:
-            if match[0] and match[1] and match[2] and match[3] and match[4]:
-                incident = {
-                    'Date/Time': match[0],
-                    'Incident Number': match[1],
-                    'Location': match[2],
-                    'Nature': match[3],
-                    'Incident ORI': match[4]
-                }
-                incidents_list.append(incident)
-
-    return incidents_list
-
-
+    incidents = []
+    try:
+        # Convert bytes data to a BytesIO object for PdfReader
+        pdf_file = io.BytesIO(incident_data)
+        reader = PdfReader(pdf_file)
+        for page in reader.pages:
+            text = page.extract_text()
+            if text:
+                lines = text.split('\n')
+                for line in lines:
+                    data = line.split()
+                    if len(data) >= 5:
+                        incident_time = data[0] + ' ' + data[1]
+                        incident_number = data[2]
+                        incident_location = " ".join(data[3:-2])
+                        nature = data[-2]
+                        incident_ori = data[-1]
+                        incidents.append((incident_time, incident_number, incident_location, nature, incident_ori))
+    except Exception as e:
+        print(f"Failed to extract incidents from PDF: {e}")
+    return incidents
 
 def createdb():
     # Ensure 'resources' directory exists
@@ -95,21 +81,21 @@ def createdb():
 def populatedb(db, incidents):
     # Connect to the database
     conn = sqlite3.connect(db)
-      # Add this line
-    # Create a cursor object
     cursor = conn.cursor()
 
     # Iterate over incidents and insert into the database
     for incident in incidents:
+        # Unpack the tuple directly
         cursor.execute('''
             INSERT INTO incidents 
             (incident_time, incident_number, incident_location, nature, incident_ori)
             VALUES (?, ?, ?, ?, ?)
-        ''', (incident['Date/Time'], incident['Incident Number'], incident['Location'], incident['Nature'], incident['Incident ORI']))
+        ''', incident)  # Pass the tuple directly
 
     # Commit the changes and close the connection
     conn.commit()
     conn.close()
+
 
 
 def status(db):
@@ -129,7 +115,7 @@ def status(db):
 
     # Fetch all rows and print the status
     rows = cursor.fetchall()
-    
+
     for row in rows:
         print(f"{row[0]}|{row[1]}")
 
