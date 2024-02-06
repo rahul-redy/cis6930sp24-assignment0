@@ -129,8 +129,7 @@ def status(db):
 
     # Fetch all rows and print the status
     rows = cursor.fetchall()
-  # Add similar lines for relevant queries
-    print("Debug: Rows -", rows)
+    
     for row in rows:
         print(f"{row[0]}|{row[1]}")
 
