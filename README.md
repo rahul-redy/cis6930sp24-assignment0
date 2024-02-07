@@ -27,9 +27,9 @@ This repository contains code for processing incident data from a given URL and 
 
 2. Execute the main script with the desired incident data URL:
 
-```bash
-pipenv run python assignment0/main.py --incidents <url>
-
+  ```bash
+  pipenv run python assignment0/main.py --incidents <url>
+  ```
 
 Project Overview
 
