@@ -33,16 +33,20 @@ from pdfminer.layout import LTTextContainer
 def extractincidents(incident_data):
     incidents = []
     max_columns = 0  # Track the maximum number of columns found on a page
+
     try:
         # Convert bytes data to a BytesIO object for PdfReader
         pdf_file = io.BytesIO(incident_data)
+
         for page_layout in extract_pages(pdf_file):
             column_texts = {}  # Dictionary to hold column data
+
             for element in page_layout:
                 if isinstance(element, LTTextContainer):
                     x, y = int(element.x0), int(element.y0)  # Get the x-coordinate of the text element
                     text = element.get_text()
                     column = x // 100  # Group by every 100 pixels on the x-axis
+
                     if column in column_texts:
                         column_texts[column].append((y, text))  # Append text along with its y-coordinate
                     else:
@@ -58,6 +62,7 @@ def extractincidents(incident_data):
             # Extract data assuming a variable number of columns
             for i in range(len(column_texts[0])):  # Use the maximum number of columns found
                 incident_data = [""] * max_columns  # Initialize with empty strings for all columns
+
                 for column in range(max_columns):  # Iterate through all columns
                     if column in column_texts:
                         try:
@@ -65,15 +70,12 @@ def extractincidents(incident_data):
 
                             # Handle cases for mapping data to columns
                             if column == 3:
-                                if text == "Location" or not text:  # Handle "Location" or empty in nature column
-                                    incident_data[2] = text  # Map to location or empty
+                                if text == "Location":
+                                    incident_data[2] = text  # Map to location
                                 else:
                                     incident_data[3] = text  # Map to nature column
                             elif column == 4:
-                                if not text:  # Handle empty incident_ori
-                                    incident_data[4] = "Empty"  # Or provide a default value
-                                else:
-                                    incident_data[4] = text  # Map to incident_ori column
+                                incident_data[4] = text if text else "Empty"  # Handle empty incident_ori
                             else:
                                 incident_data[column] = text  # Map to other columns
                         except IndexError:
@@ -82,7 +84,9 @@ def extractincidents(incident_data):
                 # Swap the data in nature and incident_ori columns
                 incident_data[3], incident_data[4] = incident_data[4], incident_data[3]
 
-                incidents.append(incident_data[:5])  # Append only the first five columns to match the database schema
+                # Only append the incident if nature is not empty
+                if incident_data[3]:
+                    incidents.append(incident_data[:5])  # Append only the first five columns to match the database schema
 
     except Exception as e:
         print(f"Failed to extract incidents from PDF: {e}")
