@@ -31,19 +31,23 @@ This repository contains code for processing incident data from a given URL and 
   pipenv run python assignment0/main.py --incidents <url>
   ```
 
-##Project Overview
+## Project Overview
 
-#main.py
+# main.py
 The main.py script serves as the entry point for the project. It utilizes the functions defined in the assignment0 module to download incident data from a specified URL, extract relevant information, create a SQLite database, and populate it with the extracted data.
 
 #assignment0.py
-The assignment0.py module contains the following functions:
+**The assignment0.py module contains the following functions:
 
-fetchincidents(url): Downloads incident data from a given URL using the urllib library.
-extractincidents(incident_data): Extracts relevant incident information from PDF data, assuming a variable number of columns on each page. The extracted data is formatted to match the database schema.
-createdb(): Creates or connects to the SQLite database (normanpd.db) and initializes the 'incidents' table if it does not exist.
-populatedb(db, incidents): Connects to the specified database and inserts incident data into the 'incidents' table.
-status(db): Connects to the database and prints a summary of incident data, including the count of each non-empty nature.
+**fetchincidents(url): Downloads incident data from a given URL using the urllib library.
+
+**extractincidents(incident_data): Extracts relevant incident information from PDF data, assuming a variable number of columns on each page. The extracted data is formatted to match the database schema.
+
+**createdb(): Creates or connects to the SQLite database (normanpd.db) and initializes the 'incidents' table if it does not exist.
+
+**populatedb(db, incidents): Connects to the specified database and inserts incident data into the 'incidents' table.
+
+**status(db): Connects to the database and prints a summary of incident data, including the count of each non-empty nature.
 
 
 
