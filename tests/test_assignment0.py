@@ -1,7 +1,7 @@
 import unittest
 import os
 import tempfile
-from assignment0.main import fetchincidents, extractincidents, createdb, populatedb, status
+from assignment0.assignment0 import fetchincidents, extractincidents, createdb, populatedb, status
 
 class TestAssignment0(unittest.TestCase):
     def setUp(self):
