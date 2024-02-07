@@ -24,10 +24,6 @@ class TestAssignment0(unittest.TestCase):
 
     # Assert that incidents_data is not None
         self.assertIsNotNone(incidents_data)
-
-    # Additional assertions based on the expected behavior of fetchincidents
-    # ...
-        self.assertIsNone(incidents_data)
         # ...
 
     def test_extractincidents(self):
@@ -58,18 +54,14 @@ class TestAssignment0(unittest.TestCase):
 
     def test_populatedb(self):
     # Mock a database path and incidents
-        db_path = 'mock_db_path.db'
+        db_path = os.path.join(os.getcwd(), 'resources', 'normanpd.db')
         incidents = [('2022-01-01', '1', 'Location1', 'Nature1', 'ORI1')]
 
+    # Ensure the database is created before calling populatedb
+        createdb()  # Remove the argument since createdb doesn't take any
+
     # Call populatedb and assert the expected behavior
-        populatedb(self.mock_db_path, incidents)
-
-
-        # Additional assertions based on the expected behavior of populatedb
-        # ...
-
-        # Clean up or additional assertions as needed
-        # ...
+        populatedb(db_path, incidents)
 
     def test_status(self):
         # Mock a database path
