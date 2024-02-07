@@ -135,15 +135,12 @@ def populatedb(db, incidents):
 
     # Iterate over incidents and insert into the database
     for incident in incidents:
-        # Ensure that incident is a tuple with exactly five elements
-        if len(incident) == 5:
-            cursor.execute('''
-                INSERT INTO incidents 
-                (incident_time, incident_number, incident_location, nature, incident_ori)
-                VALUES (?, ?, ?, ?, ?)
-            ''', incident)  # Pass the tuple directly
-        else:
-            print(f"Skipping invalid incident: {incident}")
+        non_empty_fields = sum(1 for field in incident if field.strip())
+        if non_empty_fields != 1:
+            # Using parameterized query to prevent SQL injection vulnerabilities
+            query = "INSERT INTO incidents (incident_time, incident_number, incident_location, nature, incident_ori) " \
+                    "VALUES (?, ?, ?, ?, ?)"
+            cursor.execute(query, incident)
 
     # Commit the changes and close the connection
     conn.commit()
