@@ -155,11 +155,12 @@ def status(db):
     # Create a cursor object
     cursor = conn.cursor()
 
-    # Execute a query to get the nature and count of each incident
+    # Execute a query to get the nature and count of each non-empty incident
     cursor.execute('''
-        SELECT nature, COUNT(*) as count 
+        SELECT COALESCE(NULLIF(nature, ''), 'Unknown') as nature, COUNT(*) as count 
         FROM incidents 
-        GROUP BY nature 
+        WHERE nature <> ''  -- Exclude empty nature values
+        GROUP BY COALESCE(NULLIF(nature, ''), 'Unknown') 
         ORDER BY count DESC, nature
     ''')
 
@@ -171,4 +172,5 @@ def status(db):
 
     # Close the connection
     conn.close()
+
 
