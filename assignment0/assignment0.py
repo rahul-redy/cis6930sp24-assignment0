@@ -157,10 +157,10 @@ def status(db):
 
     # Execute a query to get the nature and count of each non-empty incident
     cursor.execute('''
-        SELECT COALESCE(NULLIF(nature, ''), 'Unknown') as nature, COUNT(*) as count 
+        SELECT COALESCE(NULLIF(TRIM(nature), ''), 'Unknown') as nature, COUNT(*) as count 
         FROM incidents 
-        WHERE nature <> ''  -- Exclude empty nature values
-        GROUP BY COALESCE(NULLIF(nature, ''), 'Unknown') 
+        WHERE TRIM(nature) <> ''  -- Exclude rows where nature consists only of whitespace characters
+        GROUP BY COALESCE(NULLIF(TRIM(nature), ''), 'Unknown') 
         ORDER BY count DESC, nature
     ''')
 
