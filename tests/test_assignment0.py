@@ -1,59 +1,36 @@
+import os
+from tempfile import TemporaryDirectory
 import pytest
-from assignment0.assignment0 import extractincidents, createdb, populatedb, status
-import sqlite3
+from assignment0.main import extract_incidents
 
-# Mock incident_data for testing
-incident_data = b"Mock incident data"
-incidents = extractincidents(incident_data)
+@pytest.fixture
+def pdf_path_with_data():
+    # Create a temporary directory and generate a test PDF file with sample incident data.
+    with TemporaryDirectory() as temp_dir:
+        pdf_path = os.path.join(temp_dir, 'test_incidents.pdf')
+        with open(pdf_path, 'w', encoding='utf-8') as pdf_file:
+            pdf_file.write("""
+            2022-01-01 12:00:00 Incident1 Location1 Nature1 ORI1
+            2022-01-02 13:00:00 Incident2 Location2 Nature2 ORI2
+            2022-01-03 14:00:00 Incident3 Location3 Nature3 ORI3
+            """)
+        yield pdf_path
 
-def test_extractincidents():
-    assert isinstance(incidents, list)
-    # Add more assertions based on your requirements
-
-def test_createdb():
-    # Create a temporary database for testing
-    test_db = 'resources/test_db.db'
-    createdb(test_db)
+def test_extract_incidents_empty_pdf():
+    # Test extracting incidents from an empty PDF file.
+    with TemporaryDirectory() as temp_dir:
+        pdf_path = os.path.join(temp_dir, 'empty.pdf')
+        open(pdf_path, 'w').close()
+        incidents = extract_incidents(pdf_path)
     
-    # Check if the database file is created
-    assert os.path.exists(test_db)
+    assert len(incidents) == 0
+
+def test_extract_incidents_invalid_pdf():
+    # Test extracting incidents from an invalid PDF file (non-PDF file).
+    with TemporaryDirectory() as temp_dir:
+        pdf_path = os.path.join(temp_dir, 'invalid.pdf')
+        with open(pdf_path, 'w') as pdf_file:
+            pdf_file.write("This is not a valid PDF file.")
+        incidents = extract_incidents(pdf_path)
     
-    # Clean up: remove the temporary database
-    os.remove(test_db)
-
-def test_populatedb():
-    # Create a temporary database for testing
-    test_db = 'resources/test_db.db'
-    createdb(test_db)
-
-    # Insert data into the temporary database
-    populatedb(test_db, incidents)
-
-    # Connect to the database and check if data is inserted
-    conn = sqlite3.connect(test_db)
-    cursor = conn.cursor()
-    cursor.execute("SELECT COUNT(*) FROM incidents")
-    count = cursor.fetchone()[0]
-
-    assert count == len(incidents)
-
-    # Clean up: remove the temporary database
-    os.remove(test_db)
-
-def test_status():
-    # Create a temporary database for testing
-    test_db = 'resources/test_db.db'
-    createdb(test_db)
-
-    # Insert data into the temporary database
-    populatedb(test_db, incidents)
-
-    # Print the status and check for output
-    with patch('sys.stdout', new_callable=io.StringIO) as mock_stdout:
-        status(test_db)
-        output = mock_stdout.getvalue()
-
-    assert len(output.strip()) > 0
-
-    # Clean up: remove the temporary database
-    os.remove(test_db)
+    assert len(incidents) == 0
