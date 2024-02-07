@@ -18,17 +18,16 @@ class TestAssignment0(unittest.TestCase):
         self.temp_dir.cleanup()
 
     def test_fetchincidents(self):
-        # Mock a URL and fetch incidents
+    # Mock a URL and fetch incidents
         url = 'https://www.normanok.gov/sites/default/files/documents/2024-01/2024-01-01_daily_incident_summary.pdf'
         incidents_data = fetchincidents(url)
 
-        # Assert that incidents_data is not None
+    # Assert that incidents_data is not None
         self.assertIsNotNone(incidents_data)
 
-        # Additional assertions based on the expected behavior of fetchincidents
-        # ...
+    # Additional assertions based on the expected behavior of fetchincidents
+    # ...
         self.assertIsNone(incidents_data)
-        # Clean up or additional assertions as needed
         # ...
 
     def test_extractincidents(self):
@@ -58,11 +57,11 @@ class TestAssignment0(unittest.TestCase):
         # ...
 
     def test_populatedb(self):
-        # Mock a database path and incidents
+    # Mock a database path and incidents
         db_path = 'mock_db_path.db'
         incidents = [('2022-01-01', '1', 'Location1', 'Nature1', 'ORI1')]
 
-        # Call populatedb and assert the expected behavior
+    # Call populatedb and assert the expected behavior
         populatedb(self.mock_db_path, incidents)
 
 
