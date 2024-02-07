@@ -5,8 +5,13 @@ from assignment0.assignment0 import fetchincidents, extractincidents, createdb, 
 
 class TestAssignment0(unittest.TestCase):
     def setUp(self):
-        # Create a temporary directory for testing
+    # Create a temporary directory for testing
         self.temp_dir = tempfile.TemporaryDirectory()
+    # Mock database path for testing
+        self.mock_db_path = os.path.join(self.temp_dir.name, 'test_db.db')
+    # Create the database and necessary table
+        createdb(self.mock_db_path)
+
 
     def tearDown(self):
         # Clean up the temporary directory
@@ -22,7 +27,7 @@ class TestAssignment0(unittest.TestCase):
 
         # Additional assertions based on the expected behavior of fetchincidents
         # ...
-
+        self.assertIsNone(incidents_data)
         # Clean up or additional assertions as needed
         # ...
 
@@ -58,7 +63,8 @@ class TestAssignment0(unittest.TestCase):
         incidents = [('2022-01-01', '1', 'Location1', 'Nature1', 'ORI1')]
 
         # Call populatedb and assert the expected behavior
-        populatedb(db_path, incidents)
+        populatedb(self.mock_db_path, incidents)
+
 
         # Additional assertions based on the expected behavior of populatedb
         # ...
