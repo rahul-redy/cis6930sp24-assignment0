@@ -4,25 +4,25 @@ Rahul Reddy Vade ::: 14288319
 
 This repository contains code for processing incident data from a given URL and storing it in a SQLite database. The project structure is organized as follows:
 
-COLLABORATORS.md: File listing project collaborators.
-Pipfile: Configuration file for managing project dependencies using Pipenv.
-README.md: Project documentation.
-assignment0: Directory containing the main Python script.
-    main.py: Main script for processing incident data.
-    assignment0.py: Module containing functions for fetching, extracting, and managing incident data.
-resources: Directory for storing project-related resources.
-    normanpd.db: SQLite database file for storing incident data.
-setup.cfg: Configuration file for pytest.
-setup.py: Project setup file.
-tests: Directory containing test scripts.
-    testassignment0.py: Test script for testing the assignment0 module.
+- **COLLABORATORS.md:** File listing project collaborators.
+- **Pipfile:** Configuration file for managing project dependencies using Pipenv.
+- **README.md:** Project documentation.
+- **assignment0:** Directory containing the main Python script.
+  - **main.py:** Main script for processing incident data.
+  - **assignment0.py:** Module containing functions for fetching, extracting, and managing incident data.
+- **resources:** Directory for storing project-related resources.
+  - **normanpd.db:** SQLite database file for storing incident data.
+- **setup.cfg:** Configuration file for pytest.
+- **setup.py:** Project setup file.
+- **tests:** Directory containing test scripts.
+  - **testassignment0.py:** Test script for testing the assignment0 module.
 
+## Usage
 
+1. Install dependencies using Pipenv:
 
-Usage
-
-Install dependencies using Pipenv:
-pipenv install
+   ```bash
+   pipenv install
 
 
 Execute the main script with the desired incident data URL:
