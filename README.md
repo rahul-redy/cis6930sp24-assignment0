@@ -31,12 +31,12 @@ This repository contains code for processing incident data from a given URL and 
   pipenv run python assignment0/main.py --incidents <url>
   ```
 
-Project Overview
+##Project Overview
 
-main.py
+#main.py
 The main.py script serves as the entry point for the project. It utilizes the functions defined in the assignment0 module to download incident data from a specified URL, extract relevant information, create a SQLite database, and populate it with the extracted data.
 
-assignment0.py
+#assignment0.py
 The assignment0.py module contains the following functions:
 
 fetchincidents(url): Downloads incident data from a given URL using the urllib library.
@@ -51,7 +51,9 @@ status(db): Connects to the database and prints a summary of incident data, incl
 Running Tests
 
 To run tests, use the following command:
+```bash
 pipenv run pytest
+```
 
 
 ...
