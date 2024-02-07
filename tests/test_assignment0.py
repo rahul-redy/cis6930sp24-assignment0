@@ -19,7 +19,7 @@ class TestAssignment0(unittest.TestCase):
 
     def test_fetchincidents(self):
         # Mock a URL and fetch incidents
-        url = 'https://example.com/incidents'
+        url = 'https://www.normanok.gov/sites/default/files/documents/2024-01/2024-01-01_daily_incident_summary.pdf'
         incidents_data = fetchincidents(url)
 
         # Assert that incidents_data is not None
