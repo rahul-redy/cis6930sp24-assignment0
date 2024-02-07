@@ -5,12 +5,12 @@ from assignment0.assignment0 import fetchincidents, extractincidents, createdb, 
 
 class TestAssignment0(unittest.TestCase):
     def setUp(self):
-    # Create a temporary directory for testing
+        # Create a temporary directory for testing
         self.temp_dir = tempfile.TemporaryDirectory()
-    # Mock database path for testing
+        # Mock database path for testing
         self.mock_db_path = os.path.join(self.temp_dir.name, 'test_db.db')
-    # Create the database and necessary table
-        createdb(self.mock_db_path)
+        # Create the database and necessary table
+        createdb()  # Call createdb without any arguments
 
 
     def tearDown(self):
